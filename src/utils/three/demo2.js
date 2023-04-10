@@ -3,36 +3,19 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import vertexShader from '@/utils/three/shader/LineAnimate/vertex.glsl';
 import fragmentShader from '@/utils/three/shader/LineAnimate/fragment.glsl';
 import { genPointsBetweenTwoPoints } from '@/utils/three/ThreeUtils';
+import InitUtil from '@/utils/three/InitUtil';
 import gsap from 'gsap';
 
 let container, scene, camera, renderer, oc;
 
 export function init() {
-  container = document.getElementById('container');
+  const instance = new InitUtil('#container')
 
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
-  camera.position.set(0, 100, 100);
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-  scene = new THREE.Scene();
-
-  renderer = new THREE.WebGLRenderer({
-    antialias: true
-  });
-
-  oc = new OrbitControls(camera, renderer.domElement);
-
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setClearAlpha(0);
-  renderer.setClearColor(new THREE.Color(0, 0, 0, 0));
-
-  const grid = new THREE.GridHelper(100, 10, 0x00ffff);
-  scene.add(grid);
-
-  const axis = new THREE.AxesHelper(200);
-  scene.add(axis);
-
-  container.appendChild(renderer.domElement);
+  container = instance.container;
+  scene = instance.scene;
+  camera = instance.camera;
+  renderer = instance.renderer;
+  oc = instance.orbitControls;
 }
 
 function randomVec3Color() {
@@ -81,15 +64,7 @@ function onWindowResize(event) {
   renderer.domElement.height = window.innerHeight;
 }
 
-export function render() {
-  requestAnimationFrame(render);
-
-  oc.update();
-  renderer.render(scene, camera);
-}
-
 export function animate() {
   drawFlyLine([0, 0, 0], [100, 100, 100]);
   onWindowResize();
-  render();
 }
