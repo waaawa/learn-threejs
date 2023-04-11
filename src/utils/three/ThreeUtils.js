@@ -237,3 +237,88 @@ export function genPointsBetweenTwoPoints(start, end, count) {
   }
   return points;
 }
+
+/**
+ * 可以将经纬度转化为θ,φ
+ * @param {*} longitude
+ * @param {*} latitude
+ * @param {*} radius
+ * @returns {THREE.Vector3}
+ */
+export function getPosition(longitude, latitude, radius) {
+  // 经度，纬度转换为坐标
+  let lg = THREE.Math.degToRad(longitude);
+  let lt = THREE.Math.degToRad(latitude);
+  // 获取x，y，z坐标
+  let temp = radius * Math.cos(lt);
+  let x = temp * Math.sin(lg);
+  let y = radius * Math.sin(lt);
+  let z = temp * Math.cos(lg);
+  return new THREE.Vector3(x, y, z);
+}
+
+/**
+ * 获取两点间指定比例位置坐标
+ * @param {THREE.Vector3} v1
+ * @param {THREE.Vector3} v2
+ * @returns
+ */
+export function getVCenter(v1, v2) {
+  let v = v1.add(v2);
+  return v.divideScalar(2);
+}
+
+/**
+ * 获取两点间指定比例位置坐标
+ * @param {THREE.Vector3} v1
+ * @param {THREE.Vector3} v2
+ * @param {number} len
+ * @returns
+ */
+export function getLenVcetor(v1, v2, len) {
+  let v1v2Len = v1.distanceTo(v2);
+  return v1.lerp(v2, len / v1v2Len);
+}
+
+/**
+ * 获取贝塞尔控制点，（控制点位置大小需与夹角线性相关）
+ * @param {*} v0
+ * @param {*} v3
+ * @returns
+ */
+export function getBezierPoint(v0, v3) {
+  let angle = (v0.angleTo(v3) * 180) / Math.PI; // 0 ~ Math.PI       // 计算向量夹角
+  let aLen = angle * 2.5,
+    hLen = angle * angle * 50;
+  let p0 = new THREE.Vector3(0, 0, 0); // 法线向量
+  let rayLine = new THREE.Ray(p0, getVCenter(v0.clone(), v3.clone())); // 顶点坐标
+  let vtop = rayLine.at(hLen / rayLine.at(1).distanceTo(p0), vtop); // 位置
+  // 控制点坐标
+  let v1 = getLenVcetor(v0.clone(), vtop, aLen);
+  let v2 = getLenVcetor(v3.clone(), vtop, aLen);
+  return {
+    v1: v1,
+    v2: v2
+  };
+}
+
+/**
+ * 绘制三次贝塞尔曲线
+ * @param {number} longitude 
+ * @param {number} latitude 
+ * @param {number} longitude2 
+ * @param {number} latitude2 
+ */
+export function drawLine(longitude, latitude, longitude2, latitude2) {
+  let geometry = new THREE.Geometry(); //声明一个几何体对象Geometry
+  let v0 = getPosition(longitude, latitude, radius);
+  let v3 = getPosition(longitude2, latitude2,radius);
+  let { v1, v2 } = getBezierPoint(v0, v3); // 三维二次贝赛尔曲线
+  let curve = new THREE.CubicBezierCurve3(v0, v1, v2, v3);
+  let curvePoints = curve.getPoints(100);
+  geometry.setFromPoints(curvePoints);
+  let material = new THREE.LineBasicMaterial({ color: 0xff7e41 });
+  let line = new THREE.Line(geometry, material);
+  group.add(line);
+  this.sport(curvePoints);
+}

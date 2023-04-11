@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <ThreeShader />
+    <!-- <ThreeShader /> -->
+    <ThreeRenderer />
   </div>
 </template>
 

@@ -1,0 +1,38 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"easycode.userEmail": "1006xxxxx@gmail.com",
+		"glsl-canvas.extensions": [
+			"EXT_shader_texture_lod"
+		],
+		"webgl-glsl-editor.codeInjectionSource": [
+			"precision highp float;",
+			"uniform vec3 iResolution;",
+			"uniform float iTime;",
+			"uniform float iTimeDelta;",
+			"uniform int iFrame;",
+			"uniform float iChannelTime[4];",
+			"uniform vec3 iChannelResolution[4];",
+			"uniform vec4 iMouse;",
+			"uniform sampler2D iChannel0;",
+			"uniform sampler2D iChannel1;",
+			"uniform sampler2D iChannel2;",
+			"uniform sampler2D iChannel3;",
+			"uniform vec4 iDate;",
+			"vec3 position;",
+			"vec4 modelViewMatrix;",
+			"vec4 projectionMatrix;",
+			"vec2 uv;",
+		],
+		"webgl-glsl-editor.codeInjection": true,
+		"webgl-glsl-editor.format.placeSpaceAfterKeywords": true,
+		"webgl-glsl-editor.format.placeSpaceAfterFunctionNames": false,
+		"webgl-glsl-editor.alwaysOpenOnlineDoc": true,
+		"webgl-glsl-editor.alwaysOpenOfflineDocInNewTab": true,
+		"webgl-glsl-editor.format.placeBracesOnSeparateLine": false,
+	},
+}

@@ -20,6 +20,7 @@
     genGrid,
     drawAttackLineAnimation
   } from '@/utils/three/ThreeUtils.js';
+  import InitUtil from '@/utils/three/InitUtil.js';
   import { drawFlyingLine } from '@/utils/three/line.js';
 
   export default {
@@ -27,25 +28,7 @@
       const container = ref(null);
 
       onMounted(() => {
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(
-          120,
-          container.value.clientWidth / container.value.clientHeight,
-          0.1,
-          10000
-        );
-        const renderer = new THREE.WebGL1Renderer();
-
-        renderer.setSize(container.value.clientWidth, container.value.clientHeight);
-        container.value.appendChild(renderer.domElement);
-
-        const orbitControls = new OrbitControls(camera, renderer.domElement);
-        const trackballControls = new TrackballControls(camera, renderer.domElement);
-        const firstPersonControls = new FirstPersonControls(camera, renderer.domElement);
-        const flyControls = new FlyControls(camera, renderer.domElement);
-
-        camera.position.set(0, 50, 100);
-        camera.lookAt(scene.position);
+        const { scene } = new InitUtil(container.value);
 
         const nodes1 = genNodes({ count: 2, y: 0, distance: 50 });
         const nodes2 = genNodes({ count: 8, y: 20, distance: 400 });
@@ -82,45 +65,49 @@
         // scene.add(layer4);
         // scene.add(layer5);
 
-        scene.add(lines);
+        const vertexShader = `
+          uniform vec3 u_position;
 
-        const grid = genGrid(100, 10, new THREE.Color(0x888888));
-        console.log(grid);
-        scene.add(grid);
+          void main() {
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(u_position + position, 1);
 
-        const [line, tl] = drawAttackLineAnimation(nodes1[0], nodes2[1]);
-        scene.add(line);
+            gl_PointSize = 2.0;
+          }
+        `;
+
+        const fragmentShader = `
+          uniform vec3 u_color;
+
+          void main() {
+            gl_FragColor = vec4(u_color, 1.0);
+          }
+        `;
 
         const startPoint = new THREE.Vector3(0, 0, 0);
         const endPoint = new THREE.Vector3(10, 10, 10);
-        const color = new THREE.Color(0xffff00);
+        const u_color = new THREE.Color(0, 1, 1);
 
-        const params = { uniForms: { position: [0, 0, 0, 10, 10, 10] }, color };
-        drawFlyingLine(params, scene);
+        const uniforms = {
+          u_color: { value: u_color },
+          u_position: { value: startPoint },
+          u_start: { value: startPoint },
+          u_end: { value: endPoint }
+        };
+        const material = new THREE.ShaderMaterial({
+          uniforms,
+          vertexShader,
+          fragmentShader
+        });
+        const geometry = new THREE.BufferGeometry().setFromPoints([startPoint, endPoint]);
 
-        // const modelPath = '/models/medieval/Medieval_building.DAE';
+        // const percents = new Float32Array(2);
+        // percents[0] = 0;
+        // percents[1] = 100;
 
-        // loadModel(modelPath)
-        //   .then((model) => {
-        //     // 对加载的模型进行操作
-        //     console.log(model);
-        //     // scene.add(model);
-        //   })
-        //   .catch((error) => {
-        //     console.error(error);
-        //   });
+        // geometry.setAttribute('precent', new THREE.BufferAttribute(percents, 1));
 
-        function animation() {
-          requestAnimationFrame(animation);
-
-          orbitControls.update();
-          // trackballControls.update();
-          // firstPersonControls.update(0);
-          // flyControls.update(0);
-
-          renderer.render(scene, camera);
-        }
-        animation();
+        const line = new THREE.Points(geometry, material);
+        scene.add(line);
       });
 
       return {
