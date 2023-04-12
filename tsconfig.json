@@ -18,18 +18,24 @@
     "allowJs": true,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "/src/*"
+      ],
+      "#/*": [
+        "types/*"
+      ]
+    }
   },
   "include": [
     "plugins/**/*.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
+    "src/**/*.vue",
+    "types/**/*.ts",
+    "types/**/*.dts",
   ]
 }

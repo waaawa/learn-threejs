@@ -1,18 +1,7 @@
 <template>
   <div id="app">
-    <!-- <ThreeShader /> -->
-    <ThreeRenderer />
+    <RouterView></RouterView>
   </div>
 </template>
 
-<script>
-  import ThreeRenderer from './components/ThreeRenderer.vue';
-  import ThreeShader from './components/ThreeShader.vue';
-
-  export default {
-    components: {
-      ThreeRenderer,
-      ThreeShader
-    }
-  };
-</script>
+<script></script>

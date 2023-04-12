@@ -6,7 +6,7 @@
   import { ref, onMounted } from 'vue';
   import * as THREE from 'three';
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-  import { createNodes, setNodesPosition, setNodesColor } from '@/utils/ThreeUtils.js';
+  import { createNodes, setNodesPosition, setNodesColor } from '@/utils/three/ThreeUtils.js';
 
   export default {
     setup() {
