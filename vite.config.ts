@@ -7,8 +7,10 @@ import GLSLPlugin from './plugins/glslPlugin';
 export default defineConfig({
   plugins: [vue(), vueJsx({}), GLSLPlugin()],
   resolve: {
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
-      '@': '/src'
+      '@': '/src',
+      '#': '/types'
     }
   }
 });
