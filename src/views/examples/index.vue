@@ -1,21 +1,31 @@
 <template>
-  <div>
+  <div class="example-container">
     <div>index</div>
     <div class="list">
-      <span v-for="link in links" @click="showPage(link.name)">{{ link.name }}</span>
+      <span class="item" v-for="link in links" @click="showPage(link.name)">{{ link.name }}</span>
     </div>
     <RouterView></RouterView>
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { useRouter } from 'vue-router';
+
+  const { push } = useRouter();
+
   const links = [{ name: 'networkTopology' }, { name: 'flyingLiine' }, { name: 'learnShader' }];
 
   function showPage(name: string) {
-    console.log(name);
-
-    // router.push({ name });
+    push({ name });
   }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+  .example-container {
+    .list {
+      .item {
+        cursor: pointer;
+      }
+    }
+  }
+</style>

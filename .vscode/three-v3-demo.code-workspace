@@ -35,5 +35,6 @@
 		"webgl-glsl-editor.alwaysOpenOfflineDocInNewTab": true,
 		"webgl-glsl-editor.format.placeBracesOnSeparateLine": false,
 		"typescript.tsdk": "node_modules/typescript/lib",
+		"editor.inlayHints.enabled": "off",
 	},
 }

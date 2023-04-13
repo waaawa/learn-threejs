@@ -12,5 +12,14 @@ export default defineConfig({
       '@': '/src',
       '#': '/types'
     }
-  }
+  },
+  css: {
+    devSourcemap: true,
+    preprocessorOptions: {
+      scss: {
+        // additionalData: `$injectedColor: orange;`
+      }
+    }
+  },
+  assetsInclude: ['**/*.gltf']
 });

@@ -10,4 +10,11 @@ for (const key in modules) {
   routeModuleList.push((mod as any).default);
 }
 
-export const routes: RouteRecordRaw[] = routeModuleList;
+const fixed: RouteRecordRaw[] = [
+  {
+    path: '/',
+    redirect: '/example'
+  }
+];
+
+export const routes: RouteRecordRaw[] = [...routeModuleList, ...fixed];
